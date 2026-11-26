@@ -1,3 +1,10 @@
+// Statistik Indonesia — entri make.fun best-national-statistics-site.
+// Entrypoint ini menyalin app/ (situs statis: HTML, CSS, data BPS, chart canvas)
+// dan screenshots/ ke direktori output, lalu menulis dossier.json lewat
+// pustaka vendor make.fun. Repo dan output dihitung dari lokasi file ini
+// (import.meta.url), bukan dari direktori kerja saat perintah dijalankan,
+// supaya grader bisa menjalankan `node main.ts` dari mana saja.
+
 // A working best-site-01 entry (Node 22, standard library only): the site is this directory's app/ folder, plain
 // static files a browser opens at app/index.html (ES modules, CSS, no build step), its content held in its own files:
 // nothing it runs, styles or shows loads over the network. The program hands it in: it copies app/ and screenshots/
@@ -23,6 +30,7 @@ const here = fileURLToPath(new URL('.', import.meta.url));
 const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
 mkdirSync(out, { recursive: true });
+if (!existsSync(join(here, 'app'))) throw new Error('app/ is missing next to main.ts');
 cpSync(join(here, 'app'), join(out, 'app'), { recursive: true });
 mkdirSync(join(out, 'screenshots'), { recursive: true });
 if (existsSync(join(here, 'screenshots'))) cpSync(join(here, 'screenshots'), join(out, 'screenshots'), { recursive: true });

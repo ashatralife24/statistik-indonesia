@@ -11,6 +11,7 @@ const NAV = [
   ['#/harga', 'Harga'],
   ['#/kerja', 'Kerja'],
   ['#/kemiskinan', 'Kemiskinan'],
+  ['#/ipm', 'IPM'],
   ['#/daerah', 'Daerah'],
 ];
 
@@ -21,6 +22,7 @@ const TITLES = {
   '/harga': 'Harga & Inflasi — Statistik Indonesia',
   '/kerja': 'Ketenagakerjaan — Statistik Indonesia',
   '/kemiskinan': 'Kemiskinan — Statistik Indonesia',
+  '/ipm': 'IPM — Statistik Indonesia',
   '/daerah': 'Daerah — Statistik Indonesia',
   '/tentang': 'Tentang — Statistik Indonesia',
 };

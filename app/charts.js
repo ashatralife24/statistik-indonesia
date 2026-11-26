@@ -104,6 +104,14 @@ export function lineChart(canvas, points, options) {
   ctx.stroke();
 
   // Titik + label nilai.
+  // Bila titik rapat (deret panjang di kartu sempit), label nilai hanya di titik
+  // kunci (awal, akhir, minimum, maksimum) dan label tahun tiap titik ke-2 —
+  // supaya angka tidak saling tumpuk. Di grafik lebar, semua label tetap tampil.
+  const stepPx = points.length > 1 ? plotW / (points.length - 1) : plotW;
+  const minIdx = values.indexOf(Math.min.apply(null, values));
+  const maxIdx = values.indexOf(Math.max.apply(null, values));
+  const keyIdx = new Set([0, points.length - 1, minIdx, maxIdx]);
+  const yearEvery = stepPx < 42 ? 2 : 1;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'bottom';
   points.forEach((p, i) => {
@@ -111,20 +119,24 @@ export function lineChart(canvas, points, options) {
     ctx.beginPath();
     ctx.arc(x(i), y(p.value), 4, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = INK;
-    ctx.font = 'bold 11px -apple-system, "Segoe UI", Roboto, sans-serif';
-    // Label nilai di atas titik, kecuali bila terlalu dekat dengan tepi atas:
-    // letakkan di bawah titik. Jepit posisi x agar label tidak terpotong tepi.
-    let lx = Math.max(x(i), pad.l + 26);
-    lx = Math.min(lx, width - pad.r - 26);
-    let ly = y(p.value) - 8;
-    if (ly < pad.t + 4) ly = y(p.value) + 18;
-    ctx.fillText(formatValue(p.value, opts.decimals), lx, ly);
-    ctx.font = '11px -apple-system, "Segoe UI", Roboto, sans-serif';
-    ctx.fillStyle = MUTED;
-    ctx.textBaseline = 'top';
-    ctx.fillText(String(p.label), lx, height - pad.b + 8);
-    ctx.textBaseline = 'bottom';
+    if (keyIdx.has(i) || stepPx >= 60) {
+      ctx.fillStyle = INK;
+      ctx.font = 'bold 11px -apple-system, "Segoe UI", Roboto, sans-serif';
+      // Label nilai di atas titik, kecuali bila terlalu dekat dengan tepi atas:
+      // letakkan di bawah titik. Jepit posisi x agar label tidak terpotong tepi.
+      let lx = Math.max(x(i), pad.l + 26);
+      lx = Math.min(lx, width - pad.r - 26);
+      let ly = y(p.value) - 8;
+      if (ly < pad.t + 4) ly = y(p.value) + 18;
+      ctx.fillText(formatValue(p.value, opts.decimals), lx, ly);
+    }
+    if (i % yearEvery === 0 || i === points.length - 1) {
+      ctx.font = '11px -apple-system, "Segoe UI", Roboto, sans-serif';
+      ctx.fillStyle = MUTED;
+      ctx.textBaseline = 'top';
+      ctx.fillText(String(p.label), x(i), height - pad.b + 8);
+      ctx.textBaseline = 'bottom';
+    }
   });
   return { width, height };
 }
@@ -209,11 +221,14 @@ export function vbarChart(canvas, points, options) {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
     ctx.fillText(formatValue(p.value, opts.decimals), cx, Math.min(y0, y1) - 5);
-    ctx.font = '11px -apple-system, "Segoe UI", Roboto, sans-serif';
-    ctx.fillStyle = MUTED;
-    ctx.textBaseline = 'top';
-    ctx.fillText(String(p.label), cx, height - pad.b + 6);
-    ctx.textBaseline = 'bottom';
+    // Label tahun: tiap batang bila muat, bila tidak tiap batang ke-2.
+    if (slot >= 42 || i % 2 === 0 || i === points.length - 1) {
+      ctx.font = '11px -apple-system, "Segoe UI", Roboto, sans-serif';
+      ctx.fillStyle = MUTED;
+      ctx.textBaseline = 'top';
+      ctx.fillText(String(p.label), cx, height - pad.b + 6);
+      ctx.textBaseline = 'bottom';
+    }
   });
   return { width, height };
 }

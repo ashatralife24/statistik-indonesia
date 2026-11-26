@@ -12,10 +12,12 @@
 // first load's files and bytes, and your source), with the vendored make.fun library. Leave vendor/makefun-frontend.ts
 // as it is: the scorer requires dossier.json to be byte for byte what its own copy writes.
 //
-// A starting point, not a winner: a plain recipe collection, a list of recipes and a page for each. Build the site the
-// brief asks for in app/ (its content, ease of use, a phone layout, its look), put 3 or 4 PNG or JPEG screenshots of
-// it running in screenshots/ (the first by name is the cover; one may be a 390 x 844 phone view; shots.json says which
-// views this starter's were taken of), and run it.
+// Statistik Indonesia: situs data nasional dari publikasi BPS — beranda,
+// penduduk, ekonomi, harga, ketenagakerjaan, kemiskinan, IPM, dan daerah
+// (38 provinsi). Tiap angka disertai sumber dan tahun; grafik digambar
+// dengan kanvas polos. Ambil 3 atau 4 PNG/JPEG screenshot situs yang berjalan
+// ke screenshots/ (yang pertama menurut nama adalah cover; satu boleh
+// tampilan phone 390 x 844; shots.json mencatat tampilan tiap screenshot).
 //
 // Serve it locally with `node serve.ts`, then open http://localhost:8080.
 // Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
